@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 
 	"net/http"
 )
@@ -38,20 +37,17 @@ func ParseFromHttpResponse(hr *http.Response, response Response) (err error) {
 	body, err := ioutil.ReadAll(hr.Body)
 	if err != nil {
 		msg := fmt.Sprintf("Fail to read response body because %s", err)
-		log.Println(msg)
-		return errors.New("ClientError.IOError")
+		return errors.New("ClientError.IOError: " + msg)
 	}
 	if hr.StatusCode != 200 {
 		msg := fmt.Sprintf("Request fail with http status code: %s, with body: %s", hr.Status, body)
-		log.Println(msg)
-		return errors.New("ClientError.HttpStatusCodeError")
+		return errors.New("ClientError.HttpStatusCodeError: " + msg)
 	}
 
 	err = json.Unmarshal(body, &response)
 	if err != nil {
 		msg := fmt.Sprintf("Fail to parse json content: %s, because: %s", body, err)
-		log.Println(msg)
-		return errors.New("ClientError.ParseJsonError")
+		return errors.New("ClientError.ParseJsonError: " + msg)
 	}
 	return
 }

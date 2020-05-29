@@ -13,7 +13,7 @@ type Request interface {
 }
 
 type BaseRequest struct {
-	Path string
+	Path string `json:"-"`
 }
 
 func (r *BaseRequest) GetPath() string {
