@@ -15,6 +15,10 @@ func main() {
 	accessID := os.Args[1]
 	secretKey := os.Args[2]
 	token := os.Args[3]
+	env := "dev"
+	if len(os.Args) > 3 {
+		env = os.Args[4]
+	}
 	c := &client.Client{}
 	c.Init(endpoints.Guangzhou).WithSecretId(accessID, secretKey)
 	now := time.Now()
@@ -28,7 +32,7 @@ func main() {
 			Title:   "test",
 			Content: "This is Content @" + now.Format(time.RFC3339),
 		},
-		Environment: "dev",
+		Environment: env, // product or dev
 	}
 	log.Printf("AccessID: %s\n", accessID)
 	log.Printf("IOS Request: %s\n", req.ToJsonString())
