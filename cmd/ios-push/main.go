@@ -16,8 +16,14 @@ func main() {
 	secretKey := os.Args[2]
 	token := os.Args[3]
 	env := "dev"
-	if len(os.Args) > 3 {
+
+	if len(os.Args) > 4 {
 		env = os.Args[4]
+	}
+
+	customContent := ""
+	if len(os.Args) > 5 {
+		customContent = os.Args[5]
 	}
 	c := &client.Client{}
 	c.Init(endpoints.Guangzhou).WithSecretId(accessID, secretKey)
@@ -32,6 +38,7 @@ func main() {
 			Title:   "test",
 			Content: "This is Content @" + now.Format(time.RFC3339),
 		},
+		IOS:         map[string]interface{}{"custom_content": customContent},
 		Environment: env, // product or dev
 	}
 	log.Printf("AccessID: %s\n", accessID)

@@ -128,6 +128,8 @@ type IOSPushRequest struct {
 	TokenList []string `json:"token_list,omitempty"`
 
 	AccountList []string `json:"account_list,omitempty"`
+
+	IOS map[string]interface{} `json:"ios,omitempty"`
 }
 
 func (r *IOSPushRequest) ToJsonString() string {
