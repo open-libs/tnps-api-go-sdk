@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/open-libs/tpns-api-go-sdk/pkg/client"
+	"github.com/open-libs/tpns-api-go-sdk/pkg/client/endpoints"
 	"github.com/open-libs/tpns-api-go-sdk/pkg/models"
 )
 
@@ -15,9 +16,12 @@ func main() {
 	secretKey := os.Args[2]
 	token := os.Args[3]
 	c := &client.Client{}
-	// c.Init(endpoints.Guangzhou).WithSecretId(accessID, secretKey).WithAuthMethod(client.Signature)
-	// c.Init("http://9.134.4.90:8080").WithSecretId(accessID, secretKey).WithAuthMethod(client.Signature)
-	c.Init("http://api.tpns.tencent.com").WithSecretId(accessID, secretKey).WithAuthMethod(client.Signature)
+	customContent := ""
+	if len(os.Args) > 4 {
+		customContent = os.Args[4]
+	}
+
+	c.Init(endpoints.Guangzhou).WithSecretId(accessID, secretKey).WithAuthMethod(client.Basic)
 
 	now := time.Now()
 
@@ -29,6 +33,10 @@ func main() {
 		Message: models.AndroidMessage{
 			Title:   "test",
 			Content: "This is Content @" + now.Format(time.RFC3339),
+			Android: map[string]interface{}{
+				"custom_content": customContent,
+				"action":         map[string]interface{}{"action_type": 1, "activity": "com.kitlink.activity.LoginActivity"},
+			},
 		},
 	}
 	log.Printf("AccessID: %s\n", accessID)
